@@ -12,3 +12,8 @@ a:hover {
 
 @tailwind utilities;
 
+#wheel {
+  position: absolute;
+  left: -58px;
+  top: -61px;
+}
