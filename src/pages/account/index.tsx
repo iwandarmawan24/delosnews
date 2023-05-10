@@ -1,12 +1,12 @@
-import { useState } from 'react';
+import useLocalStorageState from 'use-local-storage-state';
 
 import { Meta } from '@/layouts/Meta';
 import NAVBAR_DATA from '@/statics/NAVBAR_DATA';
 import { Main } from '@/templates/Main';
+import type UserDataType from '@/types/userDataType';
 
 const Index = () => {
-  const [tabActive, setTabActive] = useState('most-emailed');
-
+  const [userData] = useLocalStorageState<UserDataType>('userData');
   return (
     <Main
       meta={
@@ -19,233 +19,29 @@ const Index = () => {
         navbarData: NAVBAR_DATA,
       }}
     >
-      <ul className="sticky top-[57px]	z-30 mb-4 flex flex-row items-center justify-between border-y-4 border-double border-black bg-white p-2	transition-all duration-300 ease-in">
-        {[
-          {
-            name: 'Most Emailed',
-            key: 'most-emailed',
-          },
-          {
-            name: 'Most Shared',
-            key: 'most-shared',
-          },
-          {
-            name: 'Most Viewed',
-            key: 'most-viewed',
-          },
-        ].map((data) => (
-          <li key={data.key}>
-            <div
-              onClick={() => setTabActive(data.key)}
-              onKeyPress={() => setTabActive(data.key)}
-              role="button"
-              tabIndex={0}
-              className={`cursor-pointer text-sm ${
-                tabActive === data.key ? 'font-bold' : ''
-              }`}
-            >
-              {data.name}
-            </div>
-          </li>
-        ))}
-      </ul>
-      <div className="flex w-[100%] flex-row flex-wrap justify-between gap-2">
-        <div className="flex w-[100%] animate-pulse flex-row flex-wrap justify-between gap-[1%]">
-          <div className="min-md:[49%] min-h-[200px] w-[100%] bg-gray-300 md:w-[50%]" />
-          <div className="mt-2 flex w-[100%] flex-row md:mt-0 md:w-[49%] md:flex-col md:gap-2">
-            <div className="flex w-[50%] flex-col space-y-2 md:w-[100%]">
-              <div className="h-8 w-11/12 rounded-md bg-gray-300 " />
-              <div className="h-4 w-10/12 rounded-md bg-gray-300 " />
-              <div className="h-4 w-9/12 rounded-md bg-gray-300 " />
-              <div className="h-4 w-9/12 rounded-md bg-gray-300 " />
-            </div>
-            <div className="flex w-[50%] flex-col space-y-2 md:w-[100%]">
-              <div className="h-8 w-11/12 rounded-md bg-gray-300 " />
-              <div className="h-4 w-10/12 rounded-md bg-gray-300 " />
-              <div className="h-4 w-9/12 rounded-md bg-gray-300 " />
-              <div className="h-4 w-9/12 rounded-md bg-gray-300 " />
-            </div>
+      {userData ? (
+        <div className="p-4">
+          <h1 className="mb-4 text-2xl font-bold">Account Information</h1>
+          <div className="rounded-md bg-white p-4 shadow-md">
+            <p>
+              <strong>Username:</strong> {userData.userName}
+            </p>
+            <p>
+              <strong>Email:</strong> {userData.email}
+            </p>
+            <p>
+              <strong>Credit:</strong> {userData.credit}
+            </p>
+            {userData.luckyDraw && (
+              <p>
+                <strong>Lucky Draw:</strong> {userData.luckyDraw}
+              </p>
+            )}
           </div>
         </div>
-
-        <div className=" flex w-[100%] animate-pulse flex-row justify-between gap-2 md:w-[49%]">
-          <div className="min-h-[60px] w-[50%]  bg-gray-300" />
-          <div className="w-[50%]">
-            <div className="flex flex-col space-y-2">
-              <div className="h-8 w-11/12 rounded-md bg-gray-300 " />
-              <div className="h-4 w-10/12 rounded-md bg-gray-300 " />
-              <div className="h-4 w-9/12 rounded-md bg-gray-300 " />
-              <div className="h-4 w-9/12 rounded-md bg-gray-300 " />
-            </div>
-          </div>
-        </div>
-        <div className=" flex w-[100%] animate-pulse flex-row justify-between gap-2 md:w-[49%]">
-          <div className="min-h-[60px] w-[50%]  bg-gray-300" />
-          <div className="w-[50%]">
-            <div className="flex flex-col space-y-2">
-              <div className="h-8 w-11/12 rounded-md bg-gray-300 " />
-              <div className="h-4 w-10/12 rounded-md bg-gray-300 " />
-              <div className="h-4 w-9/12 rounded-md bg-gray-300 " />
-              <div className="h-4 w-9/12 rounded-md bg-gray-300 " />
-            </div>
-          </div>
-        </div>
-        <div className=" flex w-[100%] animate-pulse flex-row justify-between gap-2 md:w-[49%]">
-          <div className="min-h-[60px] w-[50%]  bg-gray-300" />
-          <div className="w-[50%]">
-            <div className="flex flex-col space-y-2">
-              <div className="h-8 w-11/12 rounded-md bg-gray-300 " />
-              <div className="h-4 w-10/12 rounded-md bg-gray-300 " />
-              <div className="h-4 w-9/12 rounded-md bg-gray-300 " />
-              <div className="h-4 w-9/12 rounded-md bg-gray-300 " />
-            </div>
-          </div>
-        </div>
-        <div className=" flex w-[100%] animate-pulse flex-row justify-between gap-2 md:w-[49%]">
-          <div className="min-h-[60px] w-[50%]  bg-gray-300" />
-          <div className="w-[50%]">
-            <div className="flex flex-col space-y-2">
-              <div className="h-8 w-11/12 rounded-md bg-gray-300 " />
-              <div className="h-4 w-10/12 rounded-md bg-gray-300 " />
-              <div className="h-4 w-9/12 rounded-md bg-gray-300 " />
-              <div className="h-4 w-9/12 rounded-md bg-gray-300 " />
-            </div>
-          </div>
-        </div>
-        <div className=" flex w-[100%] animate-pulse flex-row justify-between gap-2 md:w-[49%]">
-          <div className="min-h-[60px] w-[50%]  bg-gray-300" />
-          <div className="w-[50%]">
-            <div className="flex flex-col space-y-2">
-              <div className="h-8 w-11/12 rounded-md bg-gray-300 " />
-              <div className="h-4 w-10/12 rounded-md bg-gray-300 " />
-              <div className="h-4 w-9/12 rounded-md bg-gray-300 " />
-              <div className="h-4 w-9/12 rounded-md bg-gray-300 " />
-            </div>
-          </div>
-        </div>
-        <div className=" flex w-[100%] animate-pulse flex-row justify-between gap-2 md:w-[49%]">
-          <div className="min-h-[60px] w-[50%]  bg-gray-300" />
-          <div className="w-[50%]">
-            <div className="flex flex-col space-y-2">
-              <div className="h-8 w-11/12 rounded-md bg-gray-300 " />
-              <div className="h-4 w-10/12 rounded-md bg-gray-300 " />
-              <div className="h-4 w-9/12 rounded-md bg-gray-300 " />
-              <div className="h-4 w-9/12 rounded-md bg-gray-300 " />
-            </div>
-          </div>
-        </div>
-        <div className=" flex w-[100%] animate-pulse flex-row justify-between gap-2 md:w-[49%]">
-          <div className="min-h-[60px] w-[50%]  bg-gray-300" />
-          <div className="w-[50%]">
-            <div className="flex flex-col space-y-2">
-              <div className="h-8 w-11/12 rounded-md bg-gray-300 " />
-              <div className="h-4 w-10/12 rounded-md bg-gray-300 " />
-              <div className="h-4 w-9/12 rounded-md bg-gray-300 " />
-              <div className="h-4 w-9/12 rounded-md bg-gray-300 " />
-            </div>
-          </div>
-        </div>
-        <div className=" flex w-[100%] animate-pulse flex-row justify-between gap-2 md:w-[49%]">
-          <div className="min-h-[60px] w-[50%]  bg-gray-300" />
-          <div className="w-[50%]">
-            <div className="flex flex-col space-y-2">
-              <div className="h-8 w-11/12 rounded-md bg-gray-300 " />
-              <div className="h-4 w-10/12 rounded-md bg-gray-300 " />
-              <div className="h-4 w-9/12 rounded-md bg-gray-300 " />
-              <div className="h-4 w-9/12 rounded-md bg-gray-300 " />
-            </div>
-          </div>
-        </div>
-        <div className=" flex w-[100%] animate-pulse flex-row justify-between gap-2 md:w-[49%]">
-          <div className="min-h-[60px] w-[50%]  bg-gray-300" />
-          <div className="w-[50%]">
-            <div className="flex flex-col space-y-2">
-              <div className="h-8 w-11/12 rounded-md bg-gray-300 " />
-              <div className="h-4 w-10/12 rounded-md bg-gray-300 " />
-              <div className="h-4 w-9/12 rounded-md bg-gray-300 " />
-              <div className="h-4 w-9/12 rounded-md bg-gray-300 " />
-            </div>
-          </div>
-        </div>
-        <div className=" flex w-[100%] animate-pulse flex-row justify-between gap-2 md:w-[49%]">
-          <div className="min-h-[60px] w-[50%]  bg-gray-300" />
-          <div className="w-[50%]">
-            <div className="flex flex-col space-y-2">
-              <div className="h-8 w-11/12 rounded-md bg-gray-300 " />
-              <div className="h-4 w-10/12 rounded-md bg-gray-300 " />
-              <div className="h-4 w-9/12 rounded-md bg-gray-300 " />
-              <div className="h-4 w-9/12 rounded-md bg-gray-300 " />
-            </div>
-          </div>
-        </div>
-        <div className=" flex w-[100%] animate-pulse flex-row justify-between gap-2 md:w-[49%]">
-          <div className="min-h-[60px] w-[50%]  bg-gray-300" />
-          <div className="w-[50%]">
-            <div className="flex flex-col space-y-2">
-              <div className="h-8 w-11/12 rounded-md bg-gray-300 " />
-              <div className="h-4 w-10/12 rounded-md bg-gray-300 " />
-              <div className="h-4 w-9/12 rounded-md bg-gray-300 " />
-              <div className="h-4 w-9/12 rounded-md bg-gray-300 " />
-            </div>
-          </div>
-        </div>
-        <div className=" flex w-[100%] animate-pulse flex-row justify-between gap-2 md:w-[49%]">
-          <div className="min-h-[60px] w-[50%]  bg-gray-300" />
-          <div className="w-[50%]">
-            <div className="flex flex-col space-y-2">
-              <div className="h-8 w-11/12 rounded-md bg-gray-300 " />
-              <div className="h-4 w-10/12 rounded-md bg-gray-300 " />
-              <div className="h-4 w-9/12 rounded-md bg-gray-300 " />
-              <div className="h-4 w-9/12 rounded-md bg-gray-300 " />
-            </div>
-          </div>
-        </div>
-        <div className=" flex w-[100%] animate-pulse flex-row justify-between gap-2 md:w-[49%]">
-          <div className="min-h-[60px] w-[50%]  bg-gray-300" />
-          <div className="w-[50%]">
-            <div className="flex flex-col space-y-2">
-              <div className="h-8 w-11/12 rounded-md bg-gray-300 " />
-              <div className="h-4 w-10/12 rounded-md bg-gray-300 " />
-              <div className="h-4 w-9/12 rounded-md bg-gray-300 " />
-              <div className="h-4 w-9/12 rounded-md bg-gray-300 " />
-            </div>
-          </div>
-        </div>
-        <div className=" flex w-[100%] animate-pulse flex-row justify-between gap-2 md:w-[49%]">
-          <div className="min-h-[60px] w-[50%]  bg-gray-300" />
-          <div className="w-[50%]">
-            <div className="flex flex-col space-y-2">
-              <div className="h-8 w-11/12 rounded-md bg-gray-300 " />
-              <div className="h-4 w-10/12 rounded-md bg-gray-300 " />
-              <div className="h-4 w-9/12 rounded-md bg-gray-300 " />
-              <div className="h-4 w-9/12 rounded-md bg-gray-300 " />
-            </div>
-          </div>
-        </div>
-        <div className=" flex w-[100%] animate-pulse flex-row justify-between gap-2 md:w-[49%]">
-          <div className="min-h-[60px] w-[50%]  bg-gray-300" />
-          <div className="w-[50%]">
-            <div className="flex flex-col space-y-2">
-              <div className="h-8 w-11/12 rounded-md bg-gray-300 " />
-              <div className="h-4 w-10/12 rounded-md bg-gray-300 " />
-              <div className="h-4 w-9/12 rounded-md bg-gray-300 " />
-              <div className="h-4 w-9/12 rounded-md bg-gray-300 " />
-            </div>
-          </div>
-        </div>
-        <div className=" flex w-[100%] animate-pulse flex-row justify-between gap-2 md:w-[49%]">
-          <div className="min-h-[60px] w-[50%]  bg-gray-300" />
-          <div className="w-[50%]">
-            <div className="flex flex-col space-y-2">
-              <div className="h-8 w-11/12 rounded-md bg-gray-300 " />
-              <div className="h-4 w-10/12 rounded-md bg-gray-300 " />
-              <div className="h-4 w-9/12 rounded-md bg-gray-300 " />
-              <div className="h-4 w-9/12 rounded-md bg-gray-300 " />
-            </div>
-          </div>
-        </div>
-      </div>
-      {tabActive}
+      ) : (
+        ''
+      )}
     </Main>
   );
 };

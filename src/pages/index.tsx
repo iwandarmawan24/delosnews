@@ -1,12 +1,70 @@
-import { useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 
+import useGetArticleQuery from '@/api/useGetArticle';
+import ListPageSkeleton from '@/layouts/listPageSkeleton';
 import { Meta } from '@/layouts/Meta';
+import ModalFilter from '@/layouts/ModalFilter';
+import NewsCard from '@/layouts/NewsCard';
 import NAVBAR_DATA from '@/statics/NAVBAR_DATA';
 import { Main } from '@/templates/Main';
+import type ArticleType from '@/types/articleType';
+import type { TabType } from '@/types/listPageTabType';
+import type PeriodType from '@/types/periodType';
+
+const Tab: {
+  name: string;
+  key: TabType;
+}[] = [
+  {
+    name: 'Most Emailed',
+    key: 'emailed',
+  },
+  {
+    name: 'Most Shared',
+    key: 'shared',
+  },
+  {
+    name: 'Most Viewed',
+    key: 'viewed',
+  },
+];
 
 const Index = () => {
-  const [tabActive, setTabActive] = useState('most-emailed');
+  const [tabActive, setTabActive] = useState<TabType>('emailed');
+  const [currentPeriod, setCurrentPeriod] = useState<PeriodType>(1);
+  const [currentKeyword, setCurrentKeyword] = useState<string>('');
+  const {
+    data: articleListPaginateData,
+    isLoading: articleListLoading,
+    isRefetching,
+    refetch,
+  } = useGetArticleQuery(currentPeriod, tabActive);
+  useEffect(() => {
+    refetch();
+  }, [tabActive, currentPeriod]);
 
+  const articleList = useMemo(() => {
+    return articleListPaginateData?.pages[0]?.results;
+  }, [articleListPaginateData, tabActive]);
+
+  function filterArticlesByTitle(
+    articleListArr: ArticleType[] | undefined,
+    keyword: string
+  ) {
+    if (!articleListArr) {
+      return [];
+    }
+
+    return articleListArr.filter((data) => {
+      return data.title.toLowerCase().includes(keyword.toLowerCase());
+    });
+  }
+  const filteredArticles = filterArticlesByTitle(articleList, currentKeyword);
+
+  const handleFilterChange = (searchTerm: string, filterType: PeriodType) => {
+    setCurrentPeriod(filterType);
+    setCurrentKeyword(searchTerm);
+  };
   return (
     <Main
       meta={
@@ -20,20 +78,7 @@ const Index = () => {
       }}
     >
       <ul className="sticky top-[57px]	z-30 mb-4 flex flex-row items-center justify-between border-y-4 border-double border-black bg-white p-2	transition-all duration-300 ease-in">
-        {[
-          {
-            name: 'Most Emailed',
-            key: 'most-emailed',
-          },
-          {
-            name: 'Most Shared',
-            key: 'most-shared',
-          },
-          {
-            name: 'Most Viewed',
-            key: 'most-viewed',
-          },
-        ].map((data) => (
+        {Tab.map((data) => (
           <li key={data.key}>
             <div
               onClick={() => setTabActive(data.key)}
@@ -49,202 +94,44 @@ const Index = () => {
           </li>
         ))}
       </ul>
-      <div className="flex w-[100%] flex-row flex-wrap justify-between gap-2">
-        <div className="flex w-[100%] animate-pulse flex-row flex-wrap justify-between gap-[1%]">
-          <div className="min-md:[49%] min-h-[200px] w-[100%] bg-gray-300 md:w-[50%]" />
-          <div className="mt-2 flex w-[100%] flex-row md:mt-0 md:w-[49%] md:flex-col md:gap-2">
-            <div className="flex w-[50%] flex-col space-y-2 md:w-[100%]">
-              <div className="h-8 w-11/12 rounded-md bg-gray-300 " />
-              <div className="h-4 w-10/12 rounded-md bg-gray-300 " />
-              <div className="h-4 w-9/12 rounded-md bg-gray-300 " />
-              <div className="h-4 w-9/12 rounded-md bg-gray-300 " />
-            </div>
-            <div className="flex w-[50%] flex-col space-y-2 md:w-[100%]">
-              <div className="h-8 w-11/12 rounded-md bg-gray-300 " />
-              <div className="h-4 w-10/12 rounded-md bg-gray-300 " />
-              <div className="h-4 w-9/12 rounded-md bg-gray-300 " />
-              <div className="h-4 w-9/12 rounded-md bg-gray-300 " />
-            </div>
-          </div>
-        </div>
 
-        <div className=" flex w-[100%] animate-pulse flex-row justify-between gap-2 md:w-[49%]">
-          <div className="min-h-[60px] w-[50%]  bg-gray-300" />
-          <div className="w-[50%]">
-            <div className="flex flex-col space-y-2">
-              <div className="h-8 w-11/12 rounded-md bg-gray-300 " />
-              <div className="h-4 w-10/12 rounded-md bg-gray-300 " />
-              <div className="h-4 w-9/12 rounded-md bg-gray-300 " />
-              <div className="h-4 w-9/12 rounded-md bg-gray-300 " />
-            </div>
-          </div>
+      <div className="relative flex w-[100%] flex-row flex-wrap justify-between gap-2">
+        <div className="sticky top-[120px] z-30 mx-auto max-w-screen-md">
+          <ModalFilter onFilterChange={handleFilterChange} />
         </div>
-        <div className=" flex w-[100%] animate-pulse flex-row justify-between gap-2 md:w-[49%]">
-          <div className="min-h-[60px] w-[50%]  bg-gray-300" />
-          <div className="w-[50%]">
-            <div className="flex flex-col space-y-2">
-              <div className="h-8 w-11/12 rounded-md bg-gray-300 " />
-              <div className="h-4 w-10/12 rounded-md bg-gray-300 " />
-              <div className="h-4 w-9/12 rounded-md bg-gray-300 " />
-              <div className="h-4 w-9/12 rounded-md bg-gray-300 " />
-            </div>
-          </div>
-        </div>
-        <div className=" flex w-[100%] animate-pulse flex-row justify-between gap-2 md:w-[49%]">
-          <div className="min-h-[60px] w-[50%]  bg-gray-300" />
-          <div className="w-[50%]">
-            <div className="flex flex-col space-y-2">
-              <div className="h-8 w-11/12 rounded-md bg-gray-300 " />
-              <div className="h-4 w-10/12 rounded-md bg-gray-300 " />
-              <div className="h-4 w-9/12 rounded-md bg-gray-300 " />
-              <div className="h-4 w-9/12 rounded-md bg-gray-300 " />
-            </div>
-          </div>
-        </div>
-        <div className=" flex w-[100%] animate-pulse flex-row justify-between gap-2 md:w-[49%]">
-          <div className="min-h-[60px] w-[50%]  bg-gray-300" />
-          <div className="w-[50%]">
-            <div className="flex flex-col space-y-2">
-              <div className="h-8 w-11/12 rounded-md bg-gray-300 " />
-              <div className="h-4 w-10/12 rounded-md bg-gray-300 " />
-              <div className="h-4 w-9/12 rounded-md bg-gray-300 " />
-              <div className="h-4 w-9/12 rounded-md bg-gray-300 " />
-            </div>
-          </div>
-        </div>
-        <div className=" flex w-[100%] animate-pulse flex-row justify-between gap-2 md:w-[49%]">
-          <div className="min-h-[60px] w-[50%]  bg-gray-300" />
-          <div className="w-[50%]">
-            <div className="flex flex-col space-y-2">
-              <div className="h-8 w-11/12 rounded-md bg-gray-300 " />
-              <div className="h-4 w-10/12 rounded-md bg-gray-300 " />
-              <div className="h-4 w-9/12 rounded-md bg-gray-300 " />
-              <div className="h-4 w-9/12 rounded-md bg-gray-300 " />
-            </div>
-          </div>
-        </div>
-        <div className=" flex w-[100%] animate-pulse flex-row justify-between gap-2 md:w-[49%]">
-          <div className="min-h-[60px] w-[50%]  bg-gray-300" />
-          <div className="w-[50%]">
-            <div className="flex flex-col space-y-2">
-              <div className="h-8 w-11/12 rounded-md bg-gray-300 " />
-              <div className="h-4 w-10/12 rounded-md bg-gray-300 " />
-              <div className="h-4 w-9/12 rounded-md bg-gray-300 " />
-              <div className="h-4 w-9/12 rounded-md bg-gray-300 " />
-            </div>
-          </div>
-        </div>
-        <div className=" flex w-[100%] animate-pulse flex-row justify-between gap-2 md:w-[49%]">
-          <div className="min-h-[60px] w-[50%]  bg-gray-300" />
-          <div className="w-[50%]">
-            <div className="flex flex-col space-y-2">
-              <div className="h-8 w-11/12 rounded-md bg-gray-300 " />
-              <div className="h-4 w-10/12 rounded-md bg-gray-300 " />
-              <div className="h-4 w-9/12 rounded-md bg-gray-300 " />
-              <div className="h-4 w-9/12 rounded-md bg-gray-300 " />
-            </div>
-          </div>
-        </div>
-        <div className=" flex w-[100%] animate-pulse flex-row justify-between gap-2 md:w-[49%]">
-          <div className="min-h-[60px] w-[50%]  bg-gray-300" />
-          <div className="w-[50%]">
-            <div className="flex flex-col space-y-2">
-              <div className="h-8 w-11/12 rounded-md bg-gray-300 " />
-              <div className="h-4 w-10/12 rounded-md bg-gray-300 " />
-              <div className="h-4 w-9/12 rounded-md bg-gray-300 " />
-              <div className="h-4 w-9/12 rounded-md bg-gray-300 " />
-            </div>
-          </div>
-        </div>
-        <div className=" flex w-[100%] animate-pulse flex-row justify-between gap-2 md:w-[49%]">
-          <div className="min-h-[60px] w-[50%]  bg-gray-300" />
-          <div className="w-[50%]">
-            <div className="flex flex-col space-y-2">
-              <div className="h-8 w-11/12 rounded-md bg-gray-300 " />
-              <div className="h-4 w-10/12 rounded-md bg-gray-300 " />
-              <div className="h-4 w-9/12 rounded-md bg-gray-300 " />
-              <div className="h-4 w-9/12 rounded-md bg-gray-300 " />
-            </div>
-          </div>
-        </div>
-        <div className=" flex w-[100%] animate-pulse flex-row justify-between gap-2 md:w-[49%]">
-          <div className="min-h-[60px] w-[50%]  bg-gray-300" />
-          <div className="w-[50%]">
-            <div className="flex flex-col space-y-2">
-              <div className="h-8 w-11/12 rounded-md bg-gray-300 " />
-              <div className="h-4 w-10/12 rounded-md bg-gray-300 " />
-              <div className="h-4 w-9/12 rounded-md bg-gray-300 " />
-              <div className="h-4 w-9/12 rounded-md bg-gray-300 " />
-            </div>
-          </div>
-        </div>
-        <div className=" flex w-[100%] animate-pulse flex-row justify-between gap-2 md:w-[49%]">
-          <div className="min-h-[60px] w-[50%]  bg-gray-300" />
-          <div className="w-[50%]">
-            <div className="flex flex-col space-y-2">
-              <div className="h-8 w-11/12 rounded-md bg-gray-300 " />
-              <div className="h-4 w-10/12 rounded-md bg-gray-300 " />
-              <div className="h-4 w-9/12 rounded-md bg-gray-300 " />
-              <div className="h-4 w-9/12 rounded-md bg-gray-300 " />
-            </div>
-          </div>
-        </div>
-        <div className=" flex w-[100%] animate-pulse flex-row justify-between gap-2 md:w-[49%]">
-          <div className="min-h-[60px] w-[50%]  bg-gray-300" />
-          <div className="w-[50%]">
-            <div className="flex flex-col space-y-2">
-              <div className="h-8 w-11/12 rounded-md bg-gray-300 " />
-              <div className="h-4 w-10/12 rounded-md bg-gray-300 " />
-              <div className="h-4 w-9/12 rounded-md bg-gray-300 " />
-              <div className="h-4 w-9/12 rounded-md bg-gray-300 " />
-            </div>
-          </div>
-        </div>
-        <div className=" flex w-[100%] animate-pulse flex-row justify-between gap-2 md:w-[49%]">
-          <div className="min-h-[60px] w-[50%]  bg-gray-300" />
-          <div className="w-[50%]">
-            <div className="flex flex-col space-y-2">
-              <div className="h-8 w-11/12 rounded-md bg-gray-300 " />
-              <div className="h-4 w-10/12 rounded-md bg-gray-300 " />
-              <div className="h-4 w-9/12 rounded-md bg-gray-300 " />
-              <div className="h-4 w-9/12 rounded-md bg-gray-300 " />
-            </div>
-          </div>
-        </div>
-        <div className=" flex w-[100%] animate-pulse flex-row justify-between gap-2 md:w-[49%]">
-          <div className="min-h-[60px] w-[50%]  bg-gray-300" />
-          <div className="w-[50%]">
-            <div className="flex flex-col space-y-2">
-              <div className="h-8 w-11/12 rounded-md bg-gray-300 " />
-              <div className="h-4 w-10/12 rounded-md bg-gray-300 " />
-              <div className="h-4 w-9/12 rounded-md bg-gray-300 " />
-              <div className="h-4 w-9/12 rounded-md bg-gray-300 " />
-            </div>
-          </div>
-        </div>
-        <div className=" flex w-[100%] animate-pulse flex-row justify-between gap-2 md:w-[49%]">
-          <div className="min-h-[60px] w-[50%]  bg-gray-300" />
-          <div className="w-[50%]">
-            <div className="flex flex-col space-y-2">
-              <div className="h-8 w-11/12 rounded-md bg-gray-300 " />
-              <div className="h-4 w-10/12 rounded-md bg-gray-300 " />
-              <div className="h-4 w-9/12 rounded-md bg-gray-300 " />
-              <div className="h-4 w-9/12 rounded-md bg-gray-300 " />
-            </div>
-          </div>
-        </div>
-        <div className=" flex w-[100%] animate-pulse flex-row justify-between gap-2 md:w-[49%]">
-          <div className="min-h-[60px] w-[50%]  bg-gray-300" />
-          <div className="w-[50%]">
-            <div className="flex flex-col space-y-2">
-              <div className="h-8 w-11/12 rounded-md bg-gray-300 " />
-              <div className="h-4 w-10/12 rounded-md bg-gray-300 " />
-              <div className="h-4 w-9/12 rounded-md bg-gray-300 " />
-              <div className="h-4 w-9/12 rounded-md bg-gray-300 " />
-            </div>
-          </div>
-        </div>
+        {!articleListLoading && !isRefetching ? (
+          // eslint-disable-next-line react/jsx-no-useless-fragment
+          <>
+            {filteredArticles !== undefined &&
+              filteredArticles.map((data, index) => {
+                if (index === 0) {
+                  return (
+                    <NewsCard
+                      key={data.id}
+                      cardData={data}
+                      cardIndex={index}
+                      badgeData={filteredArticles[index + 1]}
+                    />
+                  );
+                }
+                if (index === 1) {
+                  return null; // Returning null instead of an empty string
+                }
+                return (
+                  <NewsCard
+                    key={data.id}
+                    cardData={data}
+                    cardIndex={index}
+                    badgeData={filteredArticles[index + 1]}
+                  />
+                );
+              })}
+          </>
+        ) : (
+          <ListPageSkeleton />
+        )}
       </div>
+
       {tabActive}
     </Main>
   );
