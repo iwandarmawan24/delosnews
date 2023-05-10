@@ -1,3 +1,4 @@
+/* eslint-disable jsx-a11y/alt-text */
 import router from 'next/router';
 import { useCookies } from 'react-cookie';
 

@@ -18,7 +18,7 @@ const useGetArticleQuery = (
         .then((res) => {
           return res;
         })
-        .catch((e) => console.error(e));
+        .catch(() => {});
     },
     {
       enabled,

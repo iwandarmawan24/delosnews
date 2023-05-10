@@ -1,3 +1,4 @@
+/* eslint-disable tailwindcss/no-custom-classname */
 import type { ReactNode } from 'react';
 
 import ModalAddUser from '@/layouts/ModalAddUser';

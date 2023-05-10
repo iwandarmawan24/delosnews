@@ -153,12 +153,7 @@ const Index = () => {
   };
   return (
     <Main
-      meta={
-        <Meta
-          title="Next.js Boilerplate Presentation"
-          description="Next js Boilerplate is the perfect starter code for your project. Build your React application with the Next.js framework."
-        />
-      }
+      meta={<Meta title="DelosNews" description="DelosNews" />}
       navbar={{
         navbarData: NAVBAR_DATA,
       }}
@@ -212,7 +207,7 @@ const Index = () => {
             />
 
             <Modal isOpen={isModalOpen} onClose={closeModal}>
-              <div className="w-100 flex flex-col items-center">
+              <div className="flex w-[100%] flex-col items-center">
                 {userData.credit && userData.credit - articlePrice < 0 ? (
                   <p>
                     Your Current credit (${userData.credit}) is not enough to
@@ -222,7 +217,7 @@ const Index = () => {
                 ) : (
                   <>
                     <p>Do You Really want to buy this article?</p>
-                    <div className="w-100 mt-4 flex flex-row justify-center">
+                    <div className="mt-4 flex w-[100%] flex-row justify-center">
                       <Button
                         text="Yes"
                         handlerClickButton={() => {
