@@ -216,9 +216,10 @@ const NewsPage = ({
           </div>
 
           <Modal isOpen={isModalOpen} onClose={closeModal}>
-            <div className="flex w-[100%] flex-col items-center">
-              {userData.credit && userData.credit - articlePrice < 0 ? (
-                <p>
+            <div className="flex w-[100%] max-w-[350px] flex-col items-center">
+              {userData.credit &&
+              JSON.stringify(userData.credit - articlePrice < 0) ? (
+                <p className="w-[100%]">
                   Your Current credit (${userData.credit}) is not enough to buy
                   this article (${articlePrice}).Please find anoteher or add
                   your credit
@@ -228,7 +229,7 @@ const NewsPage = ({
                   <p>Do You Really want to buy this article?</p>
                   <div className="mt-4 flex w-[100%] flex-row justify-center">
                     <Button
-                      text="Yes"
+                      text={`${userData.credit}`}
                       handlerClickButton={() => {
                         buyArticleHandler();
                         closeModal();

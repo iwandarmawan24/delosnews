@@ -10,17 +10,17 @@ const NAVBAR_DATA: NavbarDataProps = [
   {
     name: 'Bought Articles',
     key: 'bought-articles',
-    link: '/bought-articles',
+    link: '/bought-articles/',
   },
   {
     name: 'Lucky Weels',
     key: 'lucky-weels',
-    link: '/lucky-weels',
+    link: '/lucky-weels/',
   },
   {
     name: 'My Account',
     key: 'my-account',
-    link: '/account',
+    link: '/account/',
   },
 ];
 
