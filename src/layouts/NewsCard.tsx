@@ -1,3 +1,4 @@
+/* eslint-disable unused-imports/no-unused-vars */
 /* eslint-disable jsx-a11y/alt-text */
 import router from 'next/router';
 import { useCookies } from 'react-cookie';
@@ -21,7 +22,7 @@ const NewsCard = ({
   isForPurchasedPage = false,
   period,
 }: NewsCardType) => {
-  // eslint-disable-next-line unused-imports/no-unused-vars
+  // @ts-ignore
   const [cookies, setCookie, removeCookie] = useCookies();
 
   const redirectAndSaveToCookies = async (data: ArticleType) => {

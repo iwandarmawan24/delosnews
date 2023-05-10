@@ -1,3 +1,4 @@
+/* eslint-disable jsx-a11y/alt-text */
 // @ts-ignore
 
 import { useState } from 'react';
@@ -14,8 +15,7 @@ import type ArticleType from '@/types/articleType';
 import type UserDataType from '@/types/userDataType';
 
 const Index = () => {
-  // eslint-disable-next-line unused-imports/no-unused-vars
-  const [cookies, setCookie, removeCookie] = useCookies(['detailArticle']);
+  const [cookies] = useCookies(['detailArticle']);
   const dataFromCookie: ArticleType = cookies.detailArticle;
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [buyArticle, setBuyArticle] = useLocalStorageState<ArticleType[]>(
