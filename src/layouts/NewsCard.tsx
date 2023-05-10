@@ -1,6 +1,5 @@
 /* eslint-disable unused-imports/no-unused-vars */
 /* eslint-disable jsx-a11y/alt-text */
-import router from 'next/router';
 import { useCookies } from 'react-cookie';
 
 import getImageObjectFromRespond from '@/helpers/getImageObjectFromRespond';
@@ -13,6 +12,7 @@ interface NewsCardType {
   badgeData?: ArticleType;
   isForPurchasedPage?: boolean;
   period?: PeriodType;
+  onClickHandler?: () => void;
 }
 
 const NewsCard = ({
@@ -21,6 +21,7 @@ const NewsCard = ({
   badgeData,
   isForPurchasedPage = false,
   period,
+  onClickHandler,
 }: NewsCardType) => {
   // @ts-ignore
   const [cookies, setCookie, removeCookie] = useCookies();
@@ -32,7 +33,9 @@ const NewsCard = ({
       redirectData.period = period;
     }
     setCookie('detailArticle', redirectData);
-    router.push('/news');
+    if (onClickHandler !== undefined) {
+      onClickHandler();
+    }
   };
 
   if (
