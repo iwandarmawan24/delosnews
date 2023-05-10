@@ -158,86 +158,90 @@ const Index = () => {
         navbarData: NAVBAR_DATA,
       }}
     >
-      <div className="flex h-[calc(100vh-100px)] w-[100%]  flex-row flex-wrap items-start justify-between gap-2">
-        <div className="flex w-[100%] flex-row flex-wrap justify-between gap-[1%]">
-          <div
-            className="min-md:[49%] min-h-[200px] w-[100%] bg-gray-300 md:w-[50%]"
-            tabIndex={0}
-            role="button"
-          >
-            <img
-              className="h-[100%]	w-[100%] object-cover"
-              src={`${getImageObjectFromRespond(
-                dataFromCookie.media[0]?.['media-metadata'],
-                'mediumThreeByTwo440',
-                dataFromCookie.media
-              )}`}
-            />
-          </div>
-          <div className="mt-2 w-[100%] md:mt-0 md:w-[49%]">
-            <p className="mb-2 text-xl font-bold">{dataFromCookie.title}</p>
-            <p className="mb-2 text-sm">{dataFromCookie.abstract}</p>
-            <p className="mb-2 text-sm">
-              {dataFromCookie.byline} &nbsp; {dataFromCookie.published_date}
-            </p>
-            <br />
-            <p>Price: {articlePrice} coins</p>
-            {articleDiffercenceMoreThanSevenDays === 'more-than-7' ? (
-              <p>Its published more than 7 days ago its free</p>
-            ) : (
-              ''
-            )}
-            {articlesCount.moreThanSevenDays > 5 &&
-            articleDiffercenceMoreThanSevenDays === 'more-than-7' ? (
-              <p>
-                Its published more than 7 days ago its mean to be free but you
-                got five maximum
+      {dataFromCookie ? (
+        <div className="flex h-[calc(100vh-100px)] w-[100%]  flex-row flex-wrap items-start justify-between gap-2">
+          <div className="flex w-[100%] flex-row flex-wrap justify-between gap-[1%]">
+            <div
+              className="min-md:[49%] min-h-[200px] w-[100%] bg-gray-300 md:w-[50%]"
+              tabIndex={0}
+              role="button"
+            >
+              <img
+                className="h-[100%]	w-[100%] object-cover"
+                src={`${getImageObjectFromRespond(
+                  dataFromCookie.media[0]?.['media-metadata'],
+                  'mediumThreeByTwo440',
+                  dataFromCookie.media
+                )}`}
+              />
+            </div>
+            <div className="mt-2 w-[100%] md:mt-0 md:w-[49%]">
+              <p className="mb-2 text-xl font-bold">{dataFromCookie.title}</p>
+              <p className="mb-2 text-sm">{dataFromCookie.abstract}</p>
+              <p className="mb-2 text-sm">
+                {dataFromCookie.byline} &nbsp; {dataFromCookie.published_date}
               </p>
-            ) : (
-              ''
-            )}
-            <Button
-              text={`${
-                isAlreadyBuy
-                  ? 'You Already Buy this Article'
-                  : 'Buy This Article'
-              }`}
-              handlerClickButton={openModal}
-              disabled={isAlreadyBuy}
-            />
+              <br />
+              <p>Price: {articlePrice} coins</p>
+              {articleDiffercenceMoreThanSevenDays === 'more-than-7' ? (
+                <p>Its published more than 7 days ago its free</p>
+              ) : (
+                ''
+              )}
+              {articlesCount.moreThanSevenDays > 5 &&
+              articleDiffercenceMoreThanSevenDays === 'more-than-7' ? (
+                <p>
+                  Its published more than 7 days ago its mean to be free but you
+                  got five maximum
+                </p>
+              ) : (
+                ''
+              )}
+              <Button
+                text={`${
+                  isAlreadyBuy
+                    ? 'You Already Buy this Article'
+                    : 'Buy This Article'
+                }`}
+                handlerClickButton={openModal}
+                disabled={isAlreadyBuy}
+              />
 
-            <Modal isOpen={isModalOpen} onClose={closeModal}>
-              <div className="flex w-[100%] flex-col items-center">
-                {userData.credit && userData.credit - articlePrice < 0 ? (
-                  <p>
-                    Your Current credit (${userData.credit}) is not enough to
-                    buy this article (${articlePrice}).Please find anoteher or
-                    add your credit
-                  </p>
-                ) : (
-                  <>
-                    <p>Do You Really want to buy this article?</p>
-                    <div className="mt-4 flex w-[100%] flex-row justify-center">
-                      <Button
-                        text="Yes"
-                        handlerClickButton={() => {
-                          buyArticleHandler();
-                          closeModal();
-                        }}
-                      />
-                      &nbsp; &nbsp;
-                      <Button
-                        text="No"
-                        handlerClickButton={() => closeModal()}
-                      />
-                    </div>
-                  </>
-                )}
-              </div>
-            </Modal>
+              <Modal isOpen={isModalOpen} onClose={closeModal}>
+                <div className="flex w-[100%] flex-col items-center">
+                  {userData.credit && userData.credit - articlePrice < 0 ? (
+                    <p>
+                      Your Current credit (${userData.credit}) is not enough to
+                      buy this article (${articlePrice}).Please find anoteher or
+                      add your credit
+                    </p>
+                  ) : (
+                    <>
+                      <p>Do You Really want to buy this article?</p>
+                      <div className="mt-4 flex w-[100%] flex-row justify-center">
+                        <Button
+                          text="Yes"
+                          handlerClickButton={() => {
+                            buyArticleHandler();
+                            closeModal();
+                          }}
+                        />
+                        &nbsp; &nbsp;
+                        <Button
+                          text="No"
+                          handlerClickButton={() => closeModal()}
+                        />
+                      </div>
+                    </>
+                  )}
+                </div>
+              </Modal>
+            </div>
           </div>
         </div>
-      </div>
+      ) : (
+        ''
+      )}
     </Main>
   );
 };
